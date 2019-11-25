@@ -1,0 +1,4 @@
+hello stream world!
+enter a number8^2=64
+enter a number6^2=36
+enter a numberbye
