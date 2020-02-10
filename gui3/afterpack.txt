@@ -1,0 +1,2 @@
+::::::::::::::::::::textpak=>D:/Craft/Git/2019/python-rd/gui3/beforepack.txt
+before pack text

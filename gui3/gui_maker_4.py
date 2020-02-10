@@ -103,8 +103,8 @@ if __name__ == '__main__':
         def start(self):
             self.menuBar = menuBar
             self.toolBar = toolBar # guimaker help, not guimixin
-root = Tk()
-TestAppFrameMenu(Toplevel())
-TestAppWindowMenu(Toplevel())
-TestAppWindowMenuBasic(root)
-root.mainloop()
+    root = Tk()
+    TestAppFrameMenu(Toplevel())
+    TestAppWindowMenu(Toplevel())
+    TestAppWindowMenuBasic(root)
+    root.mainloop()
