@@ -1,3 +1,45 @@
+"""
+################################################################################
+PyEdit 2.1: a Python/tkinter text file editor and component.
+
+Uses the Tk text widget, plus GuiMaker menus and toolbar buttons to
+implement a full-featured text editor that can be run as a standalone
+program, and attached as a component to other GUIs.  Also used by
+PyMailGUI and PyView to edit mail text and image file notes, and by
+PyMailGUI and PyDemos in pop-up mode to display source and text files.
+
+New in version 2.1 (4E)
+-updated to run under Python 3.X (3.1)
+-added "grep" search menu option and dialog: threaded external files search
+-verify app exit on quit if changes in other edit windows in process
+-supports arbitrary Unicode encodings for files: per textConfig.py settings
+-update change and font dialog implementations to allow many to be open
+-runs self.update() before setting text in new editor for loadFirst
+-various improvements to the Run Code option, per the next section
+
+2.1 Run Code improvements:
+-use base name after chdir to run code file, not possibly relative path
+-use launch modes that support arguments for run code file mode on Windows
+-run code inherits launchmodes backslash conversion (no longer required)
+
+New in version 2.0 (3E)
+-added simple font components input dialog
+-use Tk 8.4 undo stack API to add undo/redo text modifications
+-now verifies on quit, open, new, run, only if text modified and unsaved
+-searches are case-insensitive now by default
+-configuration module for initial font/color/size/searchcase
+
+TBD (and suggested exercises):
+-could also allow search case choice in GUI (not just config file)
+-could use re patterns for searches and greps (see text chapter)
+-could experiment with syntax-directed text colorization (see IDLE, others)
+-could try to verify app exit for quit() in non-managed windows too?
+-could queue each result as found in grep dialog thread to avoid delay
+-could use images in toolbar buttons (per examples of this in Chapter 9)
+-could scan line to map Tk insert position column to account for tabs on Info
+-could experiment with "grep" tbd Unicode issues (see notes in the code);
+################################################################################
+"""
 
 Version = '2.1'
 import sys, os                                    # platform, args, run tools
@@ -70,7 +112,7 @@ class TextEditor:                        # mix with menu/toolbar Frame class
             opensAskUser, opensEncoding,
             savesUseKnownEncoding, savesAskUser, savesEncoding)
     else:
-        from textConfig import (              # 2.1: always from this package
+        from .textConfig import (              # 2.1: always from this package
             opensAskUser, opensEncoding,
             savesUseKnownEncoding, savesAskUser, savesEncoding)
 
@@ -574,7 +616,7 @@ class TextEditor:                        # mix with menu/toolbar Frame class
         TBD: could allow input of multiple encoding names, split on 
         comma, try each one for every file, without open loadEncode?
         """
-        from PP4E.Gui.ShellGui.formrows import makeFormRow
+        from formrows import makeFormRow
 
         # nonmodal dialog: get dirnname, filenamepatt, grepkey
         popup = Toplevel()
@@ -620,7 +662,7 @@ class TextEditor:                        # mix with menu/toolbar Frame class
         sys.getfilesystemencoding() if not None?  see also Chapter6 
         footnote issue: 3.1 fnmatch always converts bytes per Latin-1;
         """
-        from PP4E.Tools.find import find
+        from find import find
         matches = []
         try:
             for filepath in find(pattern=filenamepatt, startdir=dirname):
@@ -664,7 +706,7 @@ class TextEditor:                        # mix with menu/toolbar Frame class
         we already know Unicode encoding from the search: use 
         it here when filename clicked, so open doesn't ask user;
         """
-        from PP4E.Gui.Tour.scrolledlist import ScrolledList
+        from scrolledlist import ScrolledList
         print('Matches for %s: %s' % (grepkey, len(matches)))
 
         # catch list double-click
@@ -760,7 +802,7 @@ class TextEditor:                        # mix with menu/toolbar Frame class
         def askcmdargs():
             return askstring('PyEdit', 'Commandline arguments?') or ''
 
-        from PP4E.launchmodes import System, Start, StartArgs, Fork
+        from launchmodes import System, Start, StartArgs, Fork
         filemode = False
         thefile  = str(self.getFileName())
         if os.path.exists(thefile):
@@ -794,7 +836,7 @@ class TextEditor:                        # mix with menu/toolbar Frame class
         2.0 non-modal font spec dialog
         2.1: pass per-dialog inputs to callback, may be > 1 font dialog open
         """
-        from PP4E.Gui.ShellGui.formrows import makeFormRow
+        from formrows import makeFormRow
         popup = Toplevel(self)
         popup.title('PyEdit - font')
         var1 = makeFormRow(popup, label='Family', browse=False)

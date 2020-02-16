@@ -211,7 +211,7 @@ appname = 'PyClock 2.1'
 
 
 # use new custom Tk, Toplevel for icons, etc.
-from PP4E.Gui.Tools.windows import PopupWindow, MainWindow
+from windows import PopupWindow, MainWindow
 
 class ClockPopup(PopupWindow):
     def __init__(self, config=ClockConfig, name=''):
