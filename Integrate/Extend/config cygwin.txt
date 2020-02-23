@@ -1,0 +1,35 @@
+how to configure cygwin and configure gcc 
+1. install cygwin 
+https://www.cygwin.com/
+
+2.copy the setup.exe under cygwin64 folder and run
+C:\cygwin64>setup-x86_64.exe -q -P wget -P gcc-g++ -P make -P diffutils -P libmpfr-devel -P libgmp-devel -P libmpc-devel
+
+3. wget http://ftpmirror.gnu.org/gcc/gcc-4.9.2/gcc-4.9.2.tar.gz
+
+4. tar xf gcc-4.9.2.tar.gz
+
+5. mkdir build-gcc
+cd build-gcc
+../gcc-4.9.2/configure --program-suffix=-4.9.2 --enable-languages=c,c++ --disable-bootstrap --disable-shared
+
+6. make -j4
+
+7. make install
+cd ..
+
+8. test.cpp
+#include <iostream>
+
+int main()
+{
+    auto lambda = [](auto x){ return x; };
+    std::cout << lambda("Hello generic lambda!\n");
+    return 0;
+}
+
+9. g++ --version
+g++ -std=c++1y test.cpp
+g++-4.9.2 -std=c++14 test.cpp
+./a.exe
+
